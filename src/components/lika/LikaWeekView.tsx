@@ -98,6 +98,8 @@ export default function LikaWeekView({
                     <img
                       src={weeklyEmote.src}
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                       className="lika-week-emote shrink-0 select-none"
                     />
                   </div>
@@ -144,6 +146,8 @@ export default function LikaWeekView({
                     <img
                       src={weeklyEmote.src}
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                       className="lika-week-emote shrink-0 select-none"
                     />
                   ) : (

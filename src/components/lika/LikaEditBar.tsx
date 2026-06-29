@@ -26,7 +26,7 @@ const MAX_WEEKLY_EMOTE_PRESETS = 26;
 
 const WEEKLY_EMOTE_PRESETS = Array.from({ length: MAX_WEEKLY_EMOTE_PRESETS }, (_, index) => ({
   label: `리카 ${index + 1}`,
-  src: `/img/lika-week-emotes/lika_icon${index + 1}.png`,
+  src: `/img/lika-week-emotes/lika_icon${index + 1}.webp`,
 }));
 
 const resizeImage = (file: File, maxPx = 250): Promise<string> =>
@@ -171,6 +171,8 @@ function WeeklyEmotePresetButton({
       <img
         src={preset.src}
         alt={preset.label}
+        loading="lazy"
+        decoding="async"
         className="aspect-square w-full object-cover"
         onError={() => setIsMissing(true)}
       />

@@ -45,17 +45,20 @@ const boolFromStorage = (key: string, fallback: boolean) => {
 const isValidWeeklyEmoteSrc = (src: unknown): src is string =>
   typeof src === 'string' &&
   (src.startsWith('data:image/') ||
-    /^\/img\/lika-week-emotes\/lika_icon[1-9]\d*\.png$/.test(src));
+    /^\/img\/lika-week-emotes\/lika_icon[1-9]\d*\.(png|webp)$/.test(src));
+
+const normalizeWeeklyEmoteSrc = (src: string) =>
+  src.replace(/^\/img\/lika-week-emotes\/(lika_icon[1-9]\d*)\.png$/, '/img/lika-week-emotes/$1.webp');
 
 const normalizeWeeklyEmote = (value: unknown): WeeklyEmoteEntry | null => {
-  if (isValidWeeklyEmoteSrc(value)) return { src: value, pos: 'right' };
+  if (isValidWeeklyEmoteSrc(value)) return { src: normalizeWeeklyEmoteSrc(value), pos: 'right' };
   if (!value || typeof value !== 'object') return null;
 
   const entry = value as { src?: unknown; pos?: unknown };
   if (!isValidWeeklyEmoteSrc(entry.src)) return null;
 
   return {
-    src: entry.src,
+    src: normalizeWeeklyEmoteSrc(entry.src),
     pos: entry.pos === 'left' ? 'left' : 'right',
   };
 };

@@ -89,7 +89,7 @@ export default function LikaPage() {
   });
   const [fontKey, setFontKey] = useState<LikaFontKey>(() => {
     const saved = localStorage.getItem(FONT_STORAGE_KEY) as LikaFontKey | null;
-    return saved ?? 'gaegu';
+    return saved ?? 'jua';
   });
   const [density, setDensity] = useState<LikaDensityKey>(() => {
     const saved = localStorage.getItem(DENSITY_STORAGE_KEY) as LikaDensityKey | null;
@@ -100,7 +100,7 @@ export default function LikaPage() {
     return saved ?? 'soft';
   });
   const [textScale, setTextScale] = useState(() =>
-    Math.min(2.5, Math.max(0.7, numberFromStorage(TEXT_SCALE_STORAGE_KEY, 1.5))),
+    Math.min(2.5, Math.max(0.7, numberFromStorage(TEXT_SCALE_STORAGE_KEY, 1.0))),
   );
   const [stickerScale, setStickerScale] = useState(() =>
     Math.min(2.0, Math.max(0.5, numberFromStorage(STICKER_SCALE_STORAGE_KEY, 1.15))),

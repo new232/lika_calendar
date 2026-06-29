@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/img/lika-week-emotes/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[redirects]]
   from = "/api/*"
   to = "https://grx-back-production-d31b.up.railway.app/api/:splat"

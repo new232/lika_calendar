@@ -134,7 +134,7 @@ export const EVENT_THEMES: Record<string, EventTheme> = {
   합방: {
     className: 'border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100',
   },
-  컨텐츠: {
+  콘텐츠: {
     className: 'border-violet-200 bg-violet-50 text-violet-600 hover:bg-violet-100',
   },
   대회: {

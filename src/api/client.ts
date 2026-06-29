@@ -28,11 +28,26 @@ const BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 const NOTION_MEMBER_KEY = '리카';
 
 function resolveType(title: string, tags: string[]): string {
+  const tagType = tags
+    .map((tag) => {
+      if (tag.includes('휴방')) return '휴방';
+      if (tag.includes('ASMR')) return 'ASMR';
+      if (tag.includes('합방') || tag.includes('콜라보')) return '합방';
+      if (tag.includes('콘텐츠') || tag.includes('컨텐츠')) return '콘텐츠';
+      if (tag.includes('대회')) return '대회';
+      if (tag.includes('방송')) return '방송';
+      if (tag.includes('공지')) return '공지';
+      if (tag.includes('노래')) return '노래';
+      return null;
+    })
+    .find(Boolean);
+  if (tagType) return tagType;
+
   const src = `${title} ${tags.join(' ')}`;
   if (src.includes('휴방')) return '휴방';
   if (src.includes('ASMR')) return 'ASMR';
   if (src.includes('합방') || src.includes('콜라보')) return '합방';
-  if (src.includes('컨텐츠') || src.includes('콘텐츠')) return '컨텐츠';
+  if (src.includes('콘텐츠') || src.includes('컨텐츠')) return '콘텐츠';
   if (src.includes('대회')) return '대회';
   if (src.includes('방송')) return '방송';
   if (src.includes('공지')) return '공지';
@@ -71,10 +86,10 @@ function mapToLikaSchedule(event: CalendarEvent): LikaSchedule {
 
 function createMockLikaCalendar(from: string): LikaSchedule[] {
   const base = new Date(from);
-  const types = ['방송', 'ASMR', '휴방', '합방', '컨텐츠', '노래'];
+  const types = ['방송', 'ASMR', '휴방', '합방', '콘텐츠', '노래'];
   const titles: Record<string, string> = {
     방송: '리카 저녁 방송', ASMR: '리카 ASMR 방송', 휴방: '리카 휴방',
-    합방: '리카 합방', 컨텐츠: '리카 컨텐츠', 노래: '리카 노래 방송',
+    합방: '리카 합방', 콘텐츠: '리카 콘텐츠', 노래: '리카 노래 방송',
   };
   const results: LikaSchedule[] = [];
   for (let i = 0; i < 28; i++) {

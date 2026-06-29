@@ -226,9 +226,13 @@ export default function LikaPage() {
     load();
     const onVisible = () => { if (document.visibilityState === 'visible') void load(); };
     document.addEventListener('visibilitychange', onVisible);
+    const intervalId = setInterval(() => {
+      if (document.visibilityState === 'visible') void load();
+    }, 5 * 60 * 1000);
     return () => {
       active = false;
       document.removeEventListener('visibilitychange', onVisible);
+      clearInterval(intervalId);
     };
   }, [fetchRange]);
 

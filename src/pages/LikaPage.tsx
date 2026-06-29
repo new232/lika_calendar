@@ -224,11 +224,11 @@ export default function LikaPage() {
       }
     };
     load();
-    const onFocus = () => { void load(); };
-    window.addEventListener('focus', onFocus);
+    const onVisible = () => { if (document.visibilityState === 'visible') void load(); };
+    document.addEventListener('visibilitychange', onVisible);
     return () => {
       active = false;
-      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisible);
     };
   }, [fetchRange]);
 

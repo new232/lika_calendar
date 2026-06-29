@@ -120,6 +120,6 @@ export const apiGetLikaCalendar = async (from: string, to: string): Promise<Lika
   const all: CalendarEvent[] = await res.json();
 
   return all
-    .filter((e) => e.members.includes(NOTION_MEMBER_KEY) && e.date >= from && e.date <= to + 'T99')
+    .filter((e) => e.date >= from && e.date <= to + 'T99')
     .map(mapToLikaSchedule);
 };

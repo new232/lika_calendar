@@ -61,6 +61,7 @@ function toDateKey(iso: string): string {
 
 function toTimeLabel(iso: string): string | undefined {
   if (!iso.includes('T')) return undefined;
+  if (iso.endsWith('T00:00:00.000Z')) return undefined;
   return new Intl.DateTimeFormat('ko-KR', {
     hour: '2-digit',
     minute: '2-digit',

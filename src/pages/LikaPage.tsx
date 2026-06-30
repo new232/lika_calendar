@@ -35,6 +35,8 @@ const LIKA_BADGE_STORAGE_KEY = 'lika.showLikaBadge';
 const EVENT_TIME_STORAGE_KEY = 'lika.showEventTime';
 const WEEK_CARD_WIDTH_STORAGE_KEY = 'lika.weekCardWidth';
 const CAL_STYLE_STORAGE_KEY = 'lika.calendarStyle';
+const INITIAL_SETTINGS_VERSION_STORAGE_KEY = 'lika.initialSettingsVersion';
+const INITIAL_SETTINGS_VERSION = '2026-06-30-font-size-week-width';
 
 const boolFromStorage = (key: string, fallback: boolean) => {
   const saved = localStorage.getItem(key);
@@ -68,7 +70,18 @@ const numberFromStorage = (key: string, fallback: number) => {
   return Number.isFinite(saved) ? saved : fallback;
 };
 
+const applyInitialSettings = () => {
+  if (localStorage.getItem(INITIAL_SETTINGS_VERSION_STORAGE_KEY) === INITIAL_SETTINGS_VERSION) return;
+
+  localStorage.setItem(FONT_STORAGE_KEY, 'jua');
+  localStorage.setItem(TEXT_SCALE_STORAGE_KEY, '1');
+  localStorage.setItem(WEEK_CARD_WIDTH_STORAGE_KEY, '35');
+  localStorage.setItem(INITIAL_SETTINGS_VERSION_STORAGE_KEY, INITIAL_SETTINGS_VERSION);
+};
+
 export default function LikaPage() {
+  applyInitialSettings();
+
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
   const [currentDate, setCurrentDate] = useState<Date>(() => {
     const now = new Date();
@@ -128,7 +141,7 @@ export default function LikaPage() {
     boolFromStorage(EVENT_TIME_STORAGE_KEY, true),
   );
   const [weekCardWidth, setWeekCardWidth] = useState(() =>
-    Math.min(100, Math.max(20, numberFromStorage(WEEK_CARD_WIDTH_STORAGE_KEY, 70))),
+    Math.min(100, Math.max(20, numberFromStorage(WEEK_CARD_WIDTH_STORAGE_KEY, 35))),
   );
   const [calendarStyle, setCalendarStyle] = useState<LikaCalStyleKey>(() => {
     const saved = localStorage.getItem(CAL_STYLE_STORAGE_KEY);

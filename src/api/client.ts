@@ -112,10 +112,10 @@ function createMockLikaCalendar(from: string): LikaSchedule[] {
   return results;
 }
 
-export const apiGetLikaCalendar = async (from: string, to: string): Promise<LikaSchedule[]> => {
+export const apiGetLikaCalendar = async (from: string, to: string, revalidate = false): Promise<LikaSchedule[]> => {
   if (USE_MOCK) return createMockLikaCalendar(from);
 
-  const res = await fetch(`${BASE}/lika-calendar`);
+  const res = await fetch(`${BASE}/lika-calendar`, revalidate ? { cache: 'reload' } : undefined);
   if (!res.ok) throw new Error(`Calendar API failed: ${res.status}`);
 
   const all: CalendarEvent[] = await res.json();

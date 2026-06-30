@@ -223,10 +223,10 @@ export default function LikaPage() {
   // Load schedules
   useEffect(() => {
     let active = true;
-    const load = async () => {
+    const load = async (revalidate = false) => {
       setIsLoading(true);
       try {
-        const data = await apiGetLikaCalendar(fetchRange.from, fetchRange.to);
+        const data = await apiGetLikaCalendar(fetchRange.from, fetchRange.to, revalidate);
         if (active) {
           setSchedules(data);
         }
@@ -237,10 +237,10 @@ export default function LikaPage() {
       }
     };
     load();
-    const onVisible = () => { if (document.visibilityState === 'visible') void load(); };
+    const onVisible = () => { if (document.visibilityState === 'visible') void load(true); };
     document.addEventListener('visibilitychange', onVisible);
     const intervalId = setInterval(() => {
-      if (document.visibilityState === 'visible') void load();
+      if (document.visibilityState === 'visible') void load(true);
     }, 5 * 60 * 1000);
     return () => {
       active = false;

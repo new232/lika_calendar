@@ -22,7 +22,7 @@ import {
   type WeeklyEmoteEntry,
 } from './likaCalendarPresentation';
 
-const MAX_WEEKLY_EMOTE_PRESETS = 26;
+const MAX_WEEKLY_EMOTE_PRESETS = 32;
 
 const WEEKLY_EMOTE_PRESETS = Array.from({ length: MAX_WEEKLY_EMOTE_PRESETS }, (_, index) => ({
   label: `리카 ${index + 1}`,

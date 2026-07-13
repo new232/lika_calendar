@@ -85,6 +85,32 @@ function mapToLikaSchedule(event: CalendarEvent): LikaSchedule {
   };
 }
 
+/**
+ * Notion 동기화 DB에 삭제 전 레코드가 잠시 남아 있더라도 같은 일정을
+ * 캘린더에 중복 표시하지 않는다. ID가 달라도 표시 내용이 모두 같을 때만
+ * 중복으로 판단해, 같은 날의 서로 다른 일정은 그대로 유지한다.
+ */
+function dedupeLikaSchedules(schedules: LikaSchedule[]): LikaSchedule[] {
+  const seen = new Set<string>();
+
+  return schedules.filter((schedule) => {
+    const key = JSON.stringify([
+      schedule.date,
+      schedule.time ?? '',
+      schedule.endDate ?? '',
+      schedule.endTime ?? '',
+      schedule.title.trim(),
+      [...schedule.tags].sort(),
+      [...schedule.members].sort(),
+      schedule.url ?? '',
+    ]);
+
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function createMockLikaCalendar(from: string): LikaSchedule[] {
   const base = new Date(from);
   const types = ['방송', 'ASMR', '휴방', '합방', '콘텐츠', '노래'];
@@ -120,7 +146,9 @@ export const apiGetLikaCalendar = async (from: string, to: string, revalidate = 
 
   const all: CalendarEvent[] = await res.json();
 
-  return all
-    .filter((e) => e.date >= from && e.date <= to + 'T99')
-    .map(mapToLikaSchedule);
+  return dedupeLikaSchedules(
+    all
+      .filter((e) => e.date >= from && e.date <= to + 'T99')
+      .map(mapToLikaSchedule),
+  );
 };

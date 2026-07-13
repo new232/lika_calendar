@@ -38,6 +38,29 @@ const CAL_STYLE_STORAGE_KEY = 'lika.calendarStyle';
 const INITIAL_SETTINGS_VERSION_STORAGE_KEY = 'lika.initialSettingsVersion';
 const INITIAL_SETTINGS_VERSION = '2026-06-30-font-size-week-width';
 
+const getScheduleDateKeys = (schedule: LikaSchedule): string[] => {
+  if (!schedule.endDate || schedule.endDate <= schedule.date) {
+    return [schedule.date];
+  }
+
+  const start = new Date(`${schedule.date}T00:00:00.000Z`);
+  const end = new Date(`${schedule.endDate}T00:00:00.000Z`);
+  if (
+    Number.isNaN(start.getTime()) ||
+    Number.isNaN(end.getTime()) ||
+    start.toISOString().slice(0, 10) !== schedule.date ||
+    end.toISOString().slice(0, 10) !== schedule.endDate
+  ) {
+    return [schedule.date];
+  }
+
+  const dateKeys: string[] = [];
+  for (const cursor = new Date(start); cursor <= end; cursor.setUTCDate(cursor.getUTCDate() + 1)) {
+    dateKeys.push(cursor.toISOString().slice(0, 10));
+  }
+  return dateKeys;
+};
+
 const boolFromStorage = (key: string, fallback: boolean) => {
   const saved = localStorage.getItem(key);
   if (saved === null) return fallback;
@@ -253,9 +276,10 @@ export default function LikaPage() {
   const eventsByDate = useMemo(() => {
     const map: Record<string, LikaSchedule[]> = {};
     schedules.forEach((event) => {
-      const dStr = event.date;
-      if (!map[dStr]) map[dStr] = [];
-      map[dStr].push(event);
+      getScheduleDateKeys(event).forEach((dateKey) => {
+        if (!map[dateKey]) map[dateKey] = [];
+        map[dateKey].push(event);
+      });
     });
     return map;
   }, [schedules]);
